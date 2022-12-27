@@ -86,8 +86,7 @@
         [x y] position
         vx (* step (Math/cos radians))
         vy (* step (Math/sin radians))
-        position [(+ x vx) (+ y vy)]
-        ]
+        position [(+ x vx) (+ y vy)]]
     (assoc turtle :position position
                   :distance distance
                   :velocity (if (zero? distance) 0.0 velocity))))
@@ -129,9 +128,7 @@
           pen-start (if (and done? (= pen :down))
                       position
                       pen-start)]
-      (assoc turtle :state state :lines lines :pen-start pen-start)))
-  )
-
+      (assoc turtle :state state :lines lines :pen-start pen-start))))
 
 (defn pen-down [{:keys [pen position pen-start] :as turtle}]
   (assoc turtle :pen :down
@@ -190,8 +187,7 @@
     :show (show turtle)
     :weight (weight turtle args)
     :speed (speed turtle args)
-    :else turtle)
-  )
+    :else turtle))
 
 
 
