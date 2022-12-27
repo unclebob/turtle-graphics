@@ -78,27 +78,6 @@
           (q/line 0 base-left tip 0)
           (q/line 0 base-right tip 0))))))
 
-(defn heading [turtle heading]
-  (assoc turtle :heading heading))
-
-(defn velocity [turtle velocity]
-  (assoc turtle :velocity velocity))
-
-(defn position [turtle position]
-  (assoc turtle :position position))
-
-(defn distance [turtle distance]
-  (assoc turtle :distance distance))
-
-(defn omega [turtle omega]
-  (assoc turtle :omega omega))
-
-(defn angle [turtle angle]
-  (assoc turtle :angle angle))
-
-(defn state [turtle state]
-  (assoc turtle :state state))
-
 (defn update-position [{:keys [position velocity heading distance] :as turtle}]
   (let [step (min (q/abs velocity) distance)
         distance (- distance step)

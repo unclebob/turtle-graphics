@@ -15,8 +15,7 @@
     (async/go
       (turtle-script)
       (prn "Turtle script complete"))
-    state)
-  )
+    state))
 
 (defn handle-commands [channel turtle]
   (loop [turtle turtle]
@@ -30,16 +29,14 @@
 (defn update-state [{:keys [channel] :as state}]
   (let [turtle (:turtle state)
         turtle (turtle/update-turtle turtle)]
-    (assoc state :turtle (handle-commands channel turtle)))
-  )
+    (assoc state :turtle (handle-commands channel turtle))))
 
 (defn draw-state [state]
   (q/background 240)
   (q/with-translation
     [500 500]
     (let [{:keys [turtle]} state]
-      (turtle/draw turtle)))
-  )
+      (turtle/draw turtle))))
 
 (declare turtle-graphics)
 

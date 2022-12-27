@@ -4,20 +4,42 @@
 
 (declare turtle)
 
+(defn heading [turtle heading]
+  (assoc turtle :heading heading))
+
+(defn velocity [turtle velocity]
+  (assoc turtle :velocity velocity))
+
+(defn position [turtle position]
+  (assoc turtle :position position))
+
+(defn distance [turtle distance]
+  (assoc turtle :distance distance))
+
+(defn omega [turtle omega]
+  (assoc turtle :omega omega))
+
+(defn angle [turtle angle]
+  (assoc turtle :angle angle))
+
+(defn state [turtle state]
+  (assoc turtle :state state))
+
+
 (describe "Turtle Update"
-  (with turtle (-> (t/make) (t/position [1.0 1.0]) (t/heading 1.0)))
+  (with turtle (-> (t/make) (position [1.0 1.0]) (heading 1.0)))
   (context "position update"
     (it "holds position when there's no velocity"
-      (let [turtle (-> @turtle (t/velocity 0.0) (t/state :idle))
+      (let [turtle (-> @turtle (velocity 0.0) (state :idle))
             new-turtle (t/update-turtle turtle)]
         (should= turtle new-turtle)))
 
     (it "steps by velocity when distance is far"
       (let [turtle (-> @turtle
-                       (t/heading 0.0)
-                       (t/velocity 5.0)
-                       (t/distance 100.0)
-                       (t/state :busy)
+                       (heading 0.0)
+                       (velocity 5.0)
+                       (distance 100.0)
+                       (state :busy)
                        )
             {:keys [position state velocity distance]} (t/update-turtle turtle)]
         (should= [6.0 1.0] position)
@@ -27,10 +49,10 @@
 
     (it "steps back by velocity when distance is far"
       (let [turtle (-> @turtle
-                       (t/heading 0.0)
-                       (t/velocity -5.0)
-                       (t/distance 100.0)
-                       (t/state :busy)
+                       (heading 0.0)
+                       (velocity -5.0)
+                       (distance 100.0)
+                       (state :busy)
                        )
             {:keys [position state velocity distance]} (t/update-turtle turtle)]
         (should= [-4.0 1.0] position)
@@ -40,10 +62,10 @@
 
     (it "steps by distance and goes idle when distance is near"
       (let [turtle (-> @turtle
-                       (t/heading 0.0)
-                       (t/velocity 5.0)
-                       (t/distance 3.0)
-                       (t/state :busy)
+                       (heading 0.0)
+                       (velocity 5.0)
+                       (distance 3.0)
+                       (state :busy)
                        )
             {:keys [position state velocity distance]} (t/update-turtle turtle)]
         (should= [4.0 1.0] position)
@@ -53,11 +75,10 @@
 
   (it "steps back by distance and goes idle when distance is near"
     (let [turtle (-> @turtle
-                     (t/heading 0.0)
-                     (t/velocity -5.0)
-                     (t/distance 3.0)
-                     (t/state :busy)
-                     )
+                     (heading 0.0)
+                     (velocity -5.0)
+                     (distance 3.0)
+                     (state :busy))
           {:keys [position state velocity distance]} (t/update-turtle turtle)]
       (should= [-2.0 1.0] position)
       (should= 0.0 velocity)
@@ -66,16 +87,15 @@
 
   (context "angle update"
     (it "holds angle when there's no omega"
-      (let [turtle (-> @turtle (t/omega 0) (t/heading 90) (t/angle 30) (t/state :idle))
+      (let [turtle (-> @turtle (omega 0) (heading 90) (angle 30) (state :idle))
             new-turtle (t/update-turtle turtle)]
         (should= turtle new-turtle)))
 
     (it "steps by omega when angle is far"
       (let [turtle (-> @turtle
-                       (t/omega 5.0)
-                       (t/angle 100.0)
-                       (t/state :busy)
-                       )
+                       (omega 5.0)
+                       (angle 100.0)
+                       (state :busy))
             {:keys [heading state omega angle]} (t/update-turtle turtle)]
         (should= 6.0 heading)
         (should= 5.0 omega)
@@ -84,10 +104,9 @@
 
     (it "steps back by omega when angle is far"
       (let [turtle (-> @turtle
-                       (t/omega -5.0)
-                       (t/angle 100.0)
-                       (t/state :busy)
-                       )
+                       (omega -5.0)
+                       (angle 100.0)
+                       (state :busy))
             {:keys [heading state omega angle]} (t/update-turtle turtle)]
         (should= 356.0 heading)
         (should= -5.0 omega)
@@ -96,10 +115,9 @@
 
     (it "steps by omega and goes idle when angle is near"
       (let [turtle (-> @turtle
-                       (t/omega 5.0)
-                       (t/angle 3.0)
-                       (t/state :busy)
-                       )
+                       (omega 5.0)
+                       (angle 3.0)
+                       (state :busy))
             {:keys [heading state omega angle]} (t/update-turtle turtle)]
         (should= 4.0 heading)
         (should= 0.0 omega)
@@ -108,16 +126,14 @@
 
     (it "steps back by omega and goes idle when angle is near"
       (let [turtle (-> @turtle
-                       (t/omega -5.0)
-                       (t/angle 3.0)
-                       (t/state :busy)
-                       )
+                       (omega -5.0)
+                       (angle 3.0)
+                       (state :busy))
             {:keys [heading state omega angle]} (t/update-turtle turtle)]
         (should= 358.0 heading)
         (should= 0.0 omega)
         (should= 0.0 angle)
-        (should= :idle state)))
-    )
+        (should= :idle state))))
 
   (context "pen up and down"
     (it "marks the starting coordinate upon pen down"
@@ -125,11 +141,10 @@
             pen (:pen turtle)
             pen-start (:pen-start turtle)]
         (should= :down pen)
-        (should= [1.0 1.0] pen-start))
-      )
+        (should= [1.0 1.0] pen-start)))
 
     (it "does not mark starting position if pen already down"
-      (let [turtle (-> @turtle (t/pen-down) (t/position [2.0 2.0]) (t/pen-down))
+      (let [turtle (-> @turtle (t/pen-down) (position [2.0 2.0]) (t/pen-down))
             pen (:pen turtle)
             pen-start (:pen-start turtle)]
         (should= :down pen)
@@ -139,7 +154,7 @@
       (let [turtle (-> @turtle
                        (t/weight [3])
                        (t/pen-down)
-                       (t/position [2.0 2.0])
+                       (position [2.0 2.0])
                        (t/pen-up))
             pen (:pen turtle)
             pen-start (:pen-start turtle)
@@ -151,7 +166,7 @@
                    :line-weight 3}] lines)))
 
     (it "does not add line when pen is already up"
-      (let [turtle (-> @turtle (t/position [2.0 2.0]) (t/pen-up))
+      (let [turtle (-> @turtle (position [2.0 2.0]) (t/pen-up))
             pen (:pen turtle)
             pen-start (:pen-start turtle)
             lines (:lines turtle)]
@@ -163,7 +178,7 @@
     (it "adds line upon idle after move"
       (let [turtle (->
                      @turtle
-                     (t/heading 0)
+                     (heading 0)
                      (t/pen-down)
                      (t/weight [3])
                      (t/forward [1])
